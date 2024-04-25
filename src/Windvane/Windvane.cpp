@@ -1,13 +1,8 @@
 #include "Windvane.h"
 
-// Rotary Encoder ISR
-void checkPosition()
-{
-  encoder->tick();
-}
 
 // Retrieving wind direction from rotary encoder "tick" position
-int getWindDir(){
+int getWindDir(RotaryEncoder *encoder){
   int pos = abs((int)encoder->getPosition()) % 1190; //1190 full rotation
   int angle;
   if ((int)encoder->getDirection() <0) {

@@ -3,7 +3,7 @@
 #include "Telemetry.h"
 
 /* TELEMETRY INFO */
-void printDouble( double val, unsigned int precision){
+void printDouble( HardwareSerial &teleSerial, double val, unsigned int precision){
 // prints val with number of decimal places determine by precision
 // NOTE: precision is 1 followed by the number of zeros for the desired number of decimial places
 // example: printDouble( 3.1415, 100); // prints 3.14 (two decimal places)
@@ -18,7 +18,7 @@ void printDouble( double val, unsigned int precision){
     teleSerial.print(frac,DEC) ;
 } 
 
-void printDoublenewL( double val, unsigned int precision){
+void printDoublenewL(HardwareSerial &teleSerial, double val, unsigned int precision){
 // prints val with number of decimal places determine by precision
 // NOTE: precision is 1 followed by the number of zeros for the desired number of decimial places
 // example: printDouble( 3.1415, 100); // prints 3.14 (two decimal places)
@@ -34,23 +34,24 @@ void printDoublenewL( double val, unsigned int precision){
 } 
 
 void printTelemetry(
+    HardwareSerial &teleSerial,
     float _mode, unsigned long teleTime, unsigned long &prevTeleTime,
     double _lat, double _lng, float windAngle, 
     float _winchAngle, float _rudderAngle, float desiredHeading, 
     float _heading, float _course, float roll, float _knots, 
     float distanceTo, double base_lat, double base_lng
 ){
-    if (teleTime >= prevTeleTime + telePeriod) {
+    if (teleTime >= prevTeleTime + TELE_PERIOD) {
 
         if(_mode == 0)teleSerial.print("MANUAL ");
         else if(_mode == 1)teleSerial.print("AUTO ");
         else teleSerial.print("RETURN TO BASE");
 
         teleSerial.print(" lati ");
-        printDouble(_lat,1000000);
+        printDouble(teleSerial, _lat,1000000);
         teleSerial.print(" lngi ");
         //teleSerial.print(_lng);
-        printDouble(_lng,1000000);
+        printDouble(teleSerial, _lng ,1000000);
         teleSerial.print(" windAngle ");
         teleSerial.print(windAngle);
         teleSerial.print(" winchAngle ");
@@ -70,9 +71,10 @@ void printTelemetry(
         teleSerial.print(" distanceTobase ");
         teleSerial.print(distanceTo);
         teleSerial.print(" baselat ");
-        printDouble(base_lat,1000000);
+        printDouble(teleSerial, base_lat, 1000000);
         teleSerial.print(" baselng ");
-        printDoublenewL(base_lng,1000000);
+        printDoublenewL(teleSerial, base_lng, 1000000);
         prevTeleTime = teleTime;
+        teleSerial.print("\n\n");
     }
 }

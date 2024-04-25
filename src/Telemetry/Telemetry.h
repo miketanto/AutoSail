@@ -1,14 +1,11 @@
 #ifndef TELEMETRY_H
 #define TELEMETRY_H
 
+#define TELE_PERIOD 1000
 #include <HardwareSerial.h>
-HardwareSerial teleSerial(PB10);
-
-unsigned long prevTeleTime = 0;
-const int telePeriod = 1000;
-unsigned long teleTime;
 
 void printTelemetry(
+    HardwareSerial& teleSerial,
     float _mode, unsigned long teleTime, unsigned long &prevTeleTime,
     double _lat, double _lng, float windAngle, 
     float _winchAngle, float _rudderAngle, float desiredHeading, 
@@ -16,4 +13,4 @@ void printTelemetry(
     float distanceTo, double base_lat, double base_lng
 );
 
-#endif TELEMETRY_H
+#endif //TELEMETRY_H
